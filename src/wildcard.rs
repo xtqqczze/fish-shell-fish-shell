@@ -391,12 +391,10 @@ fn wildcard_test_flags_then_complete(
             let stat_stripped = lwstat(filepath_stripped).map(|stat| (stat.dev(), stat.ino()));
             let stat = filepath_stat.as_ref().map(|stat| (stat.dev(), stat.ino()));
 
-            // TODO(MSRV>=1.88) use if-let-chain
-            //   if let Ok(stat_stripped) = stat_stripped
-            //       && let Ok(stat) = stat
-            //       && stat_stripped == stat
-            if stat_stripped.is_ok() && stat.is_ok() && stat_stripped.unwrap() == stat.unwrap() {
-                filename = &filename[0..filename.len() - 4];
+            if let (Ok(stat_stripped), Ok(stat)) = (stat_stripped, stat) {
+                if stat_stripped == stat {
+                    filename = &filename[..filename.len() - 4];
+                }
             }
         }
     }

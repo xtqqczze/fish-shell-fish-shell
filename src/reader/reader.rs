@@ -2446,7 +2446,6 @@ impl<'a> Reader<'a> {
         if EXIT_STATE.load(Ordering::Relaxed) != ExitState::FinishedHandlers as _ {
             // The order of the two conditions below is important. Try to restore the mode
             // in all cases, but only complain if interactive.
-            // TODO(MSRV>=1.88) if-let-chain
             if let Some(old_modes) = old_modes {
                 if unsafe { libc::tcsetattr(self.conf.inputfd, TCSANOW, &old_modes) } == -1
                     && is_interactive_session()
