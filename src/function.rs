@@ -450,11 +450,11 @@ impl FunctionProperties {
                     sprintf!(=> &mut out, " --on-variable %s", name);
                 }
                 EventDescription::ProcessExit { pid } => {
-                    let pid = pid.map(|p| p.get()).unwrap_or(0);
+                    let pid = pid.as_ref().map_or(0, crate::proc::Pid::get);
                     sprintf!(=> &mut out, " --on-process-exit %d", pid)
                 }
                 EventDescription::JobExit { pid, .. } => {
-                    let pid = pid.map(|p| p.get()).unwrap_or(0);
+                    let pid = pid.as_ref().map_or(0, crate::proc::Pid::get);
                     sprintf!(=> &mut out, " --on-job-exit %d", pid);
                 }
                 EventDescription::CallerExit { .. } => {
